@@ -121,38 +121,51 @@
     
         function handleSignup(event) {
             event.preventDefault();
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
 
-            // Save user data in LocalStorage
+            if (!username || !email || !password) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const userExists = users.some(user => user.email === email);
 
             if (userExists) {
-                alert('Email already registered!');
+                alert('Email นี้ถูกลงทะเบียนแล้ว!');
                 return false;
             }
 
             users.push({ username, email, password });
             localStorage.setItem('users', JSON.stringify(users));
-            alert('Sign up successful!');
+
+            console.log('Users after signup:', users); // ตรวจสอบในคอนโซล
+            alert('ลงทะเบียนสำเร็จ!');
             showLogin();
         }
 
         function checkLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!email || !password) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
 
             const users = JSON.parse(localStorage.getItem('users')) || [];
+            console.log('Users in LocalStorage:', users); // ตรวจสอบข้อมูลใน LocalStorage
+
             const user = users.find(user => user.email === email && user.password === password);
 
             if (user) {
-                alert(`Welcome back, ${user.username}!`);
-                window.location.href = "homepage.html"; // Replace with the actual homepage
+                alert(`ยินดีต้อนรับ, ${user.username}!`);
+                window.location.href = "homepage.html";
             } else {
-                alert('Invalid email or password.');
+                alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
             }
         }
     </script>
