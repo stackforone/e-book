@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการแอดมิน</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 50px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1e40af;
+        }
+
+        .book-list {
+            margin-top: 30px;
+        }
+
+        .book-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .book-item .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #2563eb;
+            font-size: 14px;
+        }
+
+        .book-item .actions button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>จัดการหนังสือ</h1>
+        <form id="addBookForm">
+            <div class="form-group">
+                <label for="bookTitle">ชื่อหนังสือ</label>
+                <input type="text" id="bookTitle" placeholder="กรอกชื่อหนังสือ" required>
+            </div>
+            <div class="form-group">
+                <label for="bookCategory">หมวดหมู่</label>
+                <input type="text" id="bookCategory" placeholder="กรอกหมวดหมู่" required>
+            </div>
+            <div class="form-group">
+                <label for="bookDescription">คำอธิบาย</label>
+                <textarea id="bookDescription" placeholder="คำอธิบายหนังสือ" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="bookImage">ลิงก์รูปภาพ</label>
+                <input type="text" id="bookImage" placeholder="วางลิงก์รูปภาพ" required>
+            </div>
+            <button type="submit" class="btn">เพิ่มหนังสือ</button>
+        </form>
+        
+        <div class="book-list" id="bookList">
+            <h2>รายการหนังสือ</h2>
+            <!-- รายการหนังสือจะถูกเพิ่มที่นี่ -->
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const bookList = document.getElementById('bookList');
+        const addBookForm = document.getElementById('addBookForm');
+    
+        // Load existing books from LocalStorage
+        let books = JSON.parse(localStorage.getItem('books')) || [];
+    
+        // Function to render book list
+        function renderBooks() {
+            // Clear the book list container
+            bookList.innerHTML = '<h2>รายการหนังสือ</h2>';
+    
+            // Iterate through each book and display it
+            books.forEach((book, index) => {
+                const bookItem = document.createElement('div');
+                bookItem.className = 'book-item';
+                bookItem.innerHTML = `
+                    <div>
+                        <strong>${book.title}</strong> (${book.category})<br>
+                        <small>${book.description}</small>
+                    </div>
+                    <div class="actions">
+                        <button onclick="editBook(${index})">แก้ไข</button>
+                        <button onclick="deleteBook(${index})">ลบ</button>
+                    </div>
+                `;
+                bookList.appendChild(bookItem);
+            });
+        }
+    
+        // Function to add a new book
+        function addBook(event) {
+            event.preventDefault();
+    
+            // Get input values
+            const title = document.getElementById('bookTitle').value.trim();
+            const category = document.getElementById('bookCategory').value.trim();
+            const description = document.getElementById('bookDescription').value.trim();
+    
+            // Check if the inputs are valid
+            if (!title || !category || !description) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+    
+            // Add the book to the books array
+            books.push({ title, category, description });
+    
+            // Save the updated books array to LocalStorage
+            localStorage.setItem('books', JSON.stringify(books));
+    
+            // Re-render the book list
+            renderBooks();
+    
+            // Reset the form
+            addBookForm.reset();
+    
+            // Notify the user
+            alert('เพิ่มหนังสือสำเร็จ!');
+        }
+    
+        // Function to edit a book
+        function editBook(index) {
+            // Get the book to be edited
+            const book = books[index];
+    
+            // Populate the form with the book's current data
+            document.getElementById('bookTitle').value = book.title;
+            document.getElementById('bookCategory').value = book.category;
+            document.getElementById('bookDescription').value = book.description;
+    
+            // Remove the book from the list temporarily
+            books.splice(index, 1);
+    
+            // Re-render the list without the edited book
+            renderBooks();
+        }
+    
+        // Function to delete a book
+        function deleteBook(index) {
+            // Confirm the delete action
+            if (!confirm('คุณต้องการลบหนังสือเล่มนี้หรือไม่?')) {
+                return;
+            }
+    
+            // Remove the book from the list
+            books.splice(index, 1);
+    
+            // Save the updated list to LocalStorage
+            localStorage.setItem('books', JSON.stringify(books));
+    
+            // Re-render the book list
+            renderBooks();
+    
+            // Notify the user
+            alert('ลบหนังสือสำเร็จ!');
+        }
+    
+        // Attach event listener to the add book form
+        addBookForm.addEventListener('submit', addBook);
+    
+        // Initial rendering of books on page load
+        renderBooks();
+    </script>
+    
+
+    
+</body>
+</html>
