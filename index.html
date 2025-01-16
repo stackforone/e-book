@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ล็อกอินและสมัครสมาชิก</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #2563eb;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        input {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: 'Prompt', sans-serif;
+        
+        }
+
+        button {
+            padding: 0.75rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+          font-family: 'Prompt', sans-serif;
+        
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        .toggle {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .toggle a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .toggle a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="form-title">ล็อกอิน</h1>
+        <form id="auth-form">
+            <input type="email" id="email" placeholder="อีเมล" required>
+            <input type="password" id="password" placeholder="รหัสผ่าน" required>
+            <button type="submit" id="submit-btn">เข้าสู่ระบบ</button>
+        </form>
+        <div class="toggle">
+            <p id="toggle-text">ยังไม่มีบัญชี? <a href="#" id="toggle-link">สมัครสมาชิก</a></p>
+        </div>
+    </div>
+
+    <script>
+        const formTitle = document.getElementById('form-title');
+        const authForm = document.getElementById('auth-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleText = document.getElementById('toggle-text');
+        const toggleLink = document.getElementById('toggle-link');
+
+        let isLogin = true;
+
+        // เปลี่ยนระหว่างล็อกอินและสมัครสมาชิก
+        toggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            if (isLogin) {
+                formTitle.textContent = 'ล็อกอิน';
+                submitBtn.textContent = 'เข้าสู่ระบบ';
+                toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggle-link">สมัครสมาชิก</a>';
+            } else {
+                formTitle.textContent = 'สมัครสมาชิก';
+                submitBtn.textContent = 'สมัคร';
+                toggleText.innerHTML = 'มีบัญชีอยู่แล้ว? <a href="#" id="toggle-link">เข้าสู่ระบบ</a>';
+            }
+        });
+
+        // จัดการล็อกอินและสมัครสมาชิก
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+
+            if (isLogin) {
+                // ล็อกอิน
+                const storedUser = JSON.parse(localStorage.getItem(email));
+                if (storedUser && storedUser.password === password) {
+                    alert('เข้าสู่ระบบสำเร็จ!');
+                    window.location.href = 'page.html';
+                } else {
+                    alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                }
+            } else {
+                // สมัครสมาชิก
+                if (localStorage.getItem(email)) {
+                    alert('อีเมลนี้มีผู้ใช้งานแล้ว');
+                } else {
+                    localStorage.setItem(email, JSON.stringify({ email, password }));
+                    alert('สมัครสมาชิกสำเร็จ! กรุณาล็อกอิน');
+                    isLogin = true;
+                    formTitle.textContent = 'ล็อกอิน';
+                    submitBtn.textContent = 'เข้าสู่ระบบ';
+                    toggleText.innerHTML = 'ยังไม่มีบัญชี? <a href="#" id="toggle-link">สมัครสมาชิก</a>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
