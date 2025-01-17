@@ -54,13 +54,12 @@
         <p id="bookAuthor"></p>
         <p id="bookCategory"></p>
         <p id="bookDescription"></p>
+        <a id="pdfLink" class="back-link" target="_blank" style="display:none;">เปิด PDF</a>
         <a href="index.html" class="back-link">ย้อนกลับ</a>
     </div>
-
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const bookIndex = urlParams.get('index');
-
         const books = JSON.parse(localStorage.getItem('books')) || [];
         if (bookIndex !== null && books[bookIndex]) {
             const book = books[bookIndex];
@@ -68,6 +67,11 @@
             document.getElementById('bookAuthor').textContent = `ผู้เขียน: ${book.author}`;
             document.getElementById('bookCategory').textContent = `หมวดหมู่: ${book.category}`;
             document.getElementById('bookDescription').textContent = book.description || 'ไม่มีคำอธิบาย';
+            if (book.pdfURL) {
+                const pdfLink = document.getElementById('pdfLink');
+                pdfLink.href = book.pdfURL;
+                pdfLink.style.display = 'inline-block';
+            }
         } else {
             document.querySelector('.container').innerHTML = '<p>ไม่พบข้อมูลหนังสือ</p>';
         }
