@@ -1,113 +1,277 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เพิ่มหนังสือ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Prompt', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8fafc;
-            color: #1e293b;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เพิ่มเนื้อหา</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    body {
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-        h1 {
-            text-align: center;
-            color: #2563eb;
-        }
+    header {
+      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid #333;
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+    header .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-        label {
-            font-size: 1rem;
-            font-weight: 600;
-        }
+    header .back-button {
+      font-size: 18px;
+      color: #fff;
+      cursor: pointer;
+    }
 
-        input, textarea, select, button {
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-        }
+    .form-container {
+      margin: 20px;
+      padding: 20px;
+      background-color: #222;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-        button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background-color: #333;
+      color: #fff;
+      font-size: 16px;
+    }
 
-        button:hover {
-            background-color: #1e40af;
-        }
-    </style>
+    .form-container textarea {
+      resize: none;
+    }
+
+    .form-container .custom-file-input {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 15px;
+      background-color: #8e44ad;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .form-container .custom-file-input input[type="file"] {
+      display: none;
+    }
+
+    .form-container button {
+      padding: 15px;
+      background-color: #8e44ad;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    .form-container button:hover {
+      background-color: #a569bd;
+      transform: scale(1.05);
+    }
+
+    .additional-section {
+      margin: 20px;
+      padding: 15px;
+      background-color: #222;
+      border-radius: 10px;
+    }
+
+    .additional-section h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .additional-section ul {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .additional-section ul li {
+      background-color: #333;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .additional-section ul li .remove-btn {
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .additional-section ul li .remove-btn:hover {
+      background-color: #c0392b;
+    }
+
+    footer {
+    position: sticky;
+    bottom: 0;
+    background-color: #111;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: -6px 0;
+    height: 60px;
+    border-top: 1px solid #333;
+  }
+
+  .menu-item {
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: color 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* ลบสีเน้นเมื่อคลิกในมือถือ */
+  }
+
+  .menu-item .icon {
+    font-size: 19px;
+    margin-bottom: 5px;
+    margin-top: -6px;
+    
+  }
+
+  .menu-item.active .icon {
+    color: #501AA4;
+  }
+
+  .menu-item:hover .icon {
+    color: #ff005c;
+  }
+
+  .add-button {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #ff5722, #ff9800);
+    box-shadow: 0 4px 8px rgba(255, 87, 34, 0.6);   color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    transform: translateY(-20%);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .add-button:hover {
+    transform: translateY(-30%) scale(1.1);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  footer span {
+    font-size: 11px;
+    margin-top: -7px;
+  }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>เพิ่มหนังสือ</h1>
-        <form id="addBookForm">
-            <label for="title">ชื่อหนังสือ</label>
-            <input type="text" id="title" name="title" required>
+  <header>
+    <span class="back-button" onclick="history.back()"><i class="fas fa-arrow-left"></i> กลับ</span>
+    <div class="logo">เพิ่มเนื้อหา</div>
+  </header>
 
-            <label for="author">ผู้เขียน</label>
-            <input type="text" id="author" name="author" required>
+  <div class="form-container">
+    <input type="text" placeholder="หัวข้อ" />
+    <textarea placeholder="รายละเอียด..." rows="5"></textarea>
+    <label class="custom-file-input">
+      เลือกไฟล์
+      <input type="file" accept="video/*" />
+    </label>
+    <button>อัพโหลด</button>
+  </div>
 
-            <label for="category">หมวดหมู่</label>
-            <select id="category" name="category">
-                <option value="นิยาย">นิยาย</option>
-                <option value="การ์ตูน">การ์ตูน</option>
-                <option value="นิยายแปล">นิยายแปล</option>
-                <option value="หนังสือเรียน">หนังสือเรียน</option>
-                <option value="วรรณกรรม">วรรณกรรม</option>
-                <option value="ความรู้ทั่วไป">ความรู้ทั่วไป</option>
-            </select>
+  <div class="additional-section">
+    <h3>เนื้อหาแนะนำ</h3>
+    <ul>
+      <li>เนื้อหา 1 <span class="remove-btn">ลบ</span></li>
+      <li>เนื้อหา 2 <span class="remove-btn">ลบ</span></li>
+      <li>เนื้อหา 3 <span class="remove-btn">ลบ</span></li>
+    </ul>
+  </div>
 
-            <label for="description">คำอธิบาย</label>
-            <textarea id="description" name="description" rows="4"></textarea>
-
-            <button type="button" onclick="addBook()">เพิ่มหนังสือ</button>
-        </form>
+  <footer>
+  <a href="#" class="menu-item active">
+    <div class="icon">
+      <i class="fa-solid fa-house"></i>
     </div>
-
-    <script>
-        function addBook() {
-            const title = document.getElementById('title').value;
-            const author = document.getElementById('author').value;
-            const category = document.getElementById('category').value;
-            const description = document.getElementById('description').value;
-
-            const newBook = {
-                title,
-                author,
-                category,
-                description
-            };
-
-            // เก็บข้อมูลใน LocalStorage
-            let books = JSON.parse(localStorage.getItem('books')) || [];
-            books.push(newBook);
-            localStorage.setItem('books', JSON.stringify(books));
-
-            alert('เพิ่มหนังสือสำเร็จ!');
-            window.location.href = 'index.html';
-        }
-    </script>
+    <span>หน้าแรก</span>
+  </a>
+  <a href="#" class="menu-item">
+    <div class="icon">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <span>ค้นหา</span>
+  </a>
+  <a href="#" class="add-button">
+    <i class="fa-solid fa-circle-plus"></i>
+  </a>
+  <a href="#" class="menu-item">
+    <div class="icon">
+      <i class="fa-solid fa-comments"></i>
+    </div>
+    <span>ข้อความ</span>
+  </a>
+  <a href="#" class="menu-item">
+    <div class="icon">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <span>โปรไฟล์</span>
+  </a>
+</footer>
+  
 </body>
 </html>
